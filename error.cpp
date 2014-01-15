@@ -5,9 +5,10 @@
 //  Created by Alexander Macri on 1/13/14.
 //  Copyright (c) 2014 Alexander Macri. All rights reserved.
 //
+#include "stdio.h"
 #include "GL/glew.h"
 #define GLFW_DLL
-#include "GLFW/glfw3.h"
+//#include "GLFW/glfw3.h"
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 #include "GL/glu.h"
@@ -22,14 +23,25 @@ int counter=0;
 //vertexIDs
 GLuint voaID, vboID;
 //vertices
-GLfloat vertexarray[]={1.f,-1.f,0.0f,0.0f,1.f,0.0f,-1.f,-1.0f,0.0f};
-GLfloat colorarray[]={1.0f,0.0f,1.0f};
+GLfloat vertexarray[]={0.5f,-0.5f,0.0f,0.0f,0.5f,0.0f,-0.5f,-0.50f,0.0f};
 //indices of triangle
 GLubyte indices[3]={0,1,2};
 
 void triangle1(){
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_TRIANGLES);
+	glColor3f(1.0,0.0,0.0);
+	glVertex3f(0.5,-0.5,0.0);
+	glVertex3f(0.0,0.5,0.0);
+	glVertex3f(-0.5,-0.5,0.0);
+	glEnd();
+	glFlush();
+}
+
+void triangle2(){
   cout << endl << "triangle1" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
+  glColor3f(0.0,0.0,0.0);
   
   glGenVertexArraysAPPLE(1, &voaID);
 	glBindVertexArrayAPPLE(voaID);
@@ -47,7 +59,7 @@ void triangle1(){
   glFlush();
 }
 
-void triangle2(){
+void triangle3(){
   cout << endl <<"triangle2" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
   
@@ -66,7 +78,7 @@ void triangle2(){
 }
 
 void drawscene(){
-  switch(counter%2){
+  switch(counter%3){
     case 0:
       glutDisplayFunc(triangle1);
       glutPostRedisplay();
@@ -75,6 +87,10 @@ void drawscene(){
       glutDisplayFunc(triangle2);
       glutPostRedisplay();
       break;
+    case 2:
+    	glutDisplayFunc(triangle3);
+    	glutPostRedisplay();
+    	break;
   }
 }
 
@@ -95,19 +111,23 @@ int main(int argc, char **argv){
   glutInit(&argc, argv);
   glutCreateWindow("Shapes");
   
-  if(!glfwInit()){
-    fprintf (stderr, "ERROR: could not start GLFW3\n");
-    exit(EXIT_FAILURE);
-  }
+  glewExperimental=GL_TRUE;
   if(glewInit()){
     fprintf(stderr, "Unable to initalize GLEW");
     exit(EXIT_FAILURE);
   }
-  glutInitContextVersion(4, 2);
-  glutInitContextProfile(GLUT_CORE_PROFILE);
+  glutInitContextVersion(4, 3);
+  glutInitContextProfile(GLUT_CORE_PROFILE|GLUT_COMPATIBILITY_PROFILE);
   //glutIdleFunc(idle);
+
+  const GLubyte* version=glGetString(GL_SHADING_LANGUAGE_VERSION);
+ fprintf(stderr,"Opengl glsl version %s\n", version);
+
+version =glGetString(GL_VERSION);
+fprintf(stderr,"Opengl version %s\n", version);
+
   glutDisplayFunc(drawscene);
   glutMouseFunc(mousepress);
- 	glutMainLoop();
-	return 0;
+  glutMainLoop();
+  return 0;
 }
