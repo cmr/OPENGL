@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Alexander Macri. All rights reserved.
 //
 #include "GL/glew.h"
-#define GLFW_DLL
-#include "GLFW/glfw3.h"
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 #include "GL/glu.h"
@@ -94,11 +92,6 @@ void idle(void){
 int main(int argc, char **argv){
   glutInit(&argc, argv);
   glutCreateWindow("Shapes");
-  
-  if(!glfwInit()){
-    fprintf (stderr, "ERROR: could not start GLFW3\n");
-    exit(EXIT_FAILURE);
-  }
   if(glewInit()){
     fprintf(stderr, "Unable to initalize GLEW");
     exit(EXIT_FAILURE);
