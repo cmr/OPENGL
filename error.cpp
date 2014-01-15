@@ -42,7 +42,7 @@ void triangle2(){
   cout << endl << "triangle1" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
   glColor3f(0.0,0.0,0.0);
-  
+
   glGenVertexArraysAPPLE(1, &voaID);
 	glBindVertexArrayAPPLE(voaID);
   
