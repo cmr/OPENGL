@@ -10,12 +10,16 @@
 
 #include "stdio.h"
 #include "GL/glew.h"
+#define GLFW_DLL
+//#include "GLFW/glfw3.h"
+//#include "GL/glfw.h"
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 #include "GL/glu.h"
 //#include <OpenGL/gl.h>
 //#include <OpenGL/glu.h>
 
+#include <stdio.h>
 #include <iostream>
 using namespace std;
 int counter=0;
@@ -32,18 +36,18 @@ GLubyte indices[3]={0,1,2};
 void triangle1(){
   cout << endl << "triangle1" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
-  
+
   glGenVertexArraysAPPLE(1, &voaID);
 	glBindVertexArrayAPPLE(voaID);
-  
+
   glGenBuffers(1, &vboID);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
-  
+
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
-  
+
   glDrawArrays(GL_TRIANGLES, 0, 3);
   cout << endl << "triangle1 should have drawn" << endl;
   glFlush();
@@ -52,14 +56,14 @@ void triangle1(){
 void triangle2(){
   cout << endl <<"triangle2" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
-  
+
   glGenVertexArraysAPPLE(1, &voaID);
 	glBindVertexArrayAPPLE(voaID);
-  
+
   glGenBuffers(1, &vboID);
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
-  
+
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, indices);
