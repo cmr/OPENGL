@@ -5,10 +5,10 @@
 //  Created by Alexander Macri on 1/13/14.
 //  Copyright (c) 2014 Alexander Macri. All rights reserved.
 //
+//run command g++ error.cpp -lglut -lGL -lGLEW -g
+
 #include "stdio.h"
 #include "GL/glew.h"
-#define GLFW_DLL
-//#include "GLFW/glfw3.h"
 #include "GL/freeglut.h"
 #include "GL/gl.h"
 #include "GL/glu.h"
