@@ -1,15 +1,10 @@
 //
-//  main.cpp
-//  error
-//
-//  Created by Alexander Macri on 1/13/14.
-//  Copyright (c) 2014 Alexander Macri. All rights reserved.
 //
 //run command g++ error.cpp -lglut -lGL -lGLEW -g
 
 #include "stdio.h"
 #include "GL/glew.h"
-#define GLFW_DLL
+//#define GLFW_DLL
 //#include "GLFW/glfw3.h"
 //#include "GL/glfw.h"
 #include "GL/freeglut.h"
@@ -67,9 +62,9 @@ const GLchar* inputShader(const char* filename){
   
   shadingSource[filesize] = 0;//neat way to set a '\0' at end of file
   
-  return const_cast<const GLchar*>(shadingSource);//overloads the const so the value with change pur file  
+  return const_cast<const GLchar*>(shadingSource);//overloads the const so the value with change per file  
   
-  //NOTE: if teh file is unable to open or empty this function will segmentation fault your program
+  //NOTE: if the file is unable to open or is empty this function will segmentation fault your program
 }
 
 //this function create your shader
@@ -92,19 +87,19 @@ GLuint createShader(GLenum type, const GLchar* shadeSource){
     glGetShaderInfoLog(shader,logSize,&logSize,infoLog);//returns the error messages into the variable infoLog
     
     const char *shadeInfo= NULL;//char array for what shader that is having an error
-    switch(type){//way to get what shaer has the error
+    switch(type){//way to get what shader has the error
       case GL_VERTEX_SHADER: shadeInfo = "vertex"; break;
       case GL_GEOMETRY_SHADER_EXT: shadeInfo = "geometric"; break;
       case GL_FRAGMENT_SHADER: shadeInfo = "fragment"; break;
     }
     fprintf(stderr,"\nCompile failure in %u shader: %s\n Error message:\n%s\n",type,shadeInfo,infoLog);//prints information need to debug shaders
-    delete[] infoLog;//memeory management
+    delete[] infoLog;//memory management
   }
   
   return shader;//self explanatory
 }
 
-//this function creates the shading program we are goin to link the shader too
+//this function creates the shading program we are going to link the shader too
 GLuint createProgram(const vector<GLuint> shadeList){
 
   GLuint program = glCreateProgram();//creates your program
@@ -247,7 +242,7 @@ void idle(void){
 int main(int argc, char **argv){
 
   glutInit(&argc, argv);
-  glutCreateWindow("Shapes");//creates teh window with the specified name
+  glutCreateWindow("Shapes");//creates the window with the specified name
   
   //initializes glew
   glewExperimental=GL_TRUE;
@@ -260,7 +255,7 @@ int main(int argc, char **argv){
   glutInitContextProfile(GLUT_CORE_PROFILE|GLUT_COMPATIBILITY_PROFILE);//specifies what profile your using
 
 
-  //retruns what version of opengl and glsl yuor computer can use
+  //retruns what version of opengl and glsl your computer can use
   const GLubyte* version=glGetString(GL_SHADING_LANGUAGE_VERSION);
   fprintf(stderr,"Opengl glsl version %s\n", version);
 
