@@ -1,6 +1,6 @@
-#version 120
+#version 130
 
-varying vec3 position;
+in vec3 position;
 
 void main()
 {

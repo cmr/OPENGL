@@ -32,7 +32,7 @@ typedef struct{
 //vertexIDs
 GLuint voaID, vboID;
 //vertices
-GLfloat vertexarray[]={0.5f,-0.5f,0.0f,0.0f,0.5f,0.0f,-0.5f,-0.50f,0.0f};
+GLfloat vertexarray[]={0.5f,-0.5f,0.0f,0.0f,0.5f,0.0f,-0.5f,-0.5f,0.0f};
 //indices of triangle
 GLubyte indices[3]={0,1,2};
 
@@ -157,13 +157,13 @@ void triangle2(){
   cout << endl << "triangle2" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
   glColor3f(0.0,1.0,0.0);
-  glGenVertexArraysAPPLE(1, &voaID);
-	glBindVertexArrayAPPLE(voaID);
+  
+  glGenVertexArrays(1, &voaID);
+  glBindVertexArray(voaID);
 
   glGenBuffers(1, &vboID);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, vboID);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
 
  ShaderInfo shaders[]={
   { GL_VERTEX_SHADER , "vertexshader.glsl"} ,
@@ -173,7 +173,8 @@ void triangle2(){
 
   initShaders(shaders);
   
-  glEnableVertexAttribArray(GL_VERTEX_ARRAY);
+  
+  glEnableVertexAttribArray(0);
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
 
   glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -185,12 +186,12 @@ void triangle3(){
   cout << endl <<"triangle3" << endl;
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glGenVertexArraysAPPLE(1, &voaID);
-	glBindVertexArrayAPPLE(voaID);
+  glGenVertexArrays(1, &voaID);
+  glBindVertexArray(voaID);
 
   glGenBuffers(1, &vboID);
-	glBindBuffer(GL_ARRAY_BUFFER, vboID);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, vboID);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);
 
  ShaderInfo shaders[]={
   { GL_VERTEX_SHADER , "vertexshader.glsl"} ,
@@ -200,11 +201,14 @@ void triangle3(){
 
   initShaders(shaders);
 
-  //glEnableVertexAttribArray(0);
-  //glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
-  glEnableClientState(GL_VERTEX_ARRAY);
-    glVertexPointer(3, GL_FLOAT, 0, (void *)0);
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, indices);
+  	  	
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);
+  
+  //glEnableClientState(GL_VERTEX_ARRAY);
+  //glVertexPointer(3, GL_FLOAT, 0, (void *)0);
+  
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, indices);
   cout << endl << "triangle3 should have drawn" << endl;
   glFlush();
 }

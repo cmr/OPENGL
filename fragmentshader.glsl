@@ -1,6 +1,6 @@
-#version 120
+#version 130
 
-varying vec4 outColor;
+out vec4 outColor;
 
 void main()
 {
