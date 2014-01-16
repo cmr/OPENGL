@@ -18,11 +18,17 @@ using namespace std;
 int counter=0;
 
 
+//function prototypes
+GLuint createShader(GLenum type, const GLchar* shadeSource);
+const GLchar* inputShader(const char* filename);
+GLuint createProgram(const vector<GLuint> shadeList);
 
+
+//the info for loading and linking shaders
 typedef struct{
-  GLenum type;
-  const char* filename;
-} ShaderInfo; // the info for loading and linking shaders
+  GLenum type;// GL_VERTEX_SHADER or GL_FRAGMENT_SHADER
+  const char* filename;//name of file to input
+} ShaderInfo;
 
 //vertexIDs
 GLuint vaoID, vboID;// the buffers that are going to be linked too
@@ -31,6 +37,21 @@ GLfloat vertexarray[]={0.5f,-0.5f,0.0f,0.0f,0.5f,0.0f,-0.5f,-0.5f,0.0f};// verti
 //indices of triangle
 GLubyte indices[3]={0,1,2};
 
+//create the shaders for your program
+void initShaders(ShaderInfo* shaders){
+  
+  ShaderInfo* shade=shaders;
+  vector<GLuint> Shadelist;//initialize list of shaders
+  
+  while(shade->type != GL_NONE){//loop through all the shaders in the list
+    Shadelist.push_back(createShader(shade->type,inputShader(shade->filename)));//adding shaders into the list
+    ++shade;//incrementation
+  }
+  
+  GLuint program=createProgram(Shadelist);//creates the program linking to all the shaders
+  
+  glUseProgram(program);//installs a program object as part of current rendering state
+}
 
 //this funtion loads the shader from the vertex, fragments shaders 
 const GLchar* inputShader(const char* filename){
@@ -75,7 +96,6 @@ GLuint createShader(GLenum type, const GLchar* shadeSource){
   
   glCompileShader(shader);//compiles a shader object
   
-  
   GLint compileStatus;//status of the compilation variable
   glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);//returns the comiple status into the variable
   
@@ -95,7 +115,6 @@ GLuint createShader(GLenum type, const GLchar* shadeSource){
     fprintf(stderr,"\nCompile failure in %u shader: %s\n Error message:\n%s\n",type,shadeInfo,infoLog);//prints information need to debug shaders
     delete[] infoLog;//memory management
   }
-  
   return shader;//self explanatory
 }
 
@@ -124,40 +143,24 @@ GLuint createProgram(const vector<GLuint> shadeList){
     
     for(GLuint i=0;i<shadeList.size();i++){glDeleteShader(shadeList[i]);}//memory management
   }
-  
   return program;//self explanatory
 }
 
-//create the shaders for your program
-void initShaders(ShaderInfo* shaders){
-  
-  ShaderInfo* shade=shaders;
-  vector<GLuint> Shadelist;//initialize list of shaders
-  
-  while(shade->type != GL_NONE){//loop through all the shaders in the list
-    Shadelist.push_back(createShader(shade->type,inputShader(shade->filename)));//adding shaders into the list
-    ++shade;//incrementation
-  }
-  
-  GLuint program=createProgram(Shadelist);//creates the program linking to all the shaders
-  
-  glUseProgram(program);//installs a program object as part of current rendering state
-}
-
+/*
 //opengl antique
 void triangle1(){
 	glClear(GL_COLOR_BUFFER_BIT);//clears the screen
-	glBegin(GL_TRIANGLES);//draws a trinagle
-	glColor3f(1.0,0.0,0.0);//specifies the color r,g,b
+	glBegin(GL_TRIANGLES);//draws a triangle
+	glColor3f(1.0,1.0,0.0);//specifies the color r,g,b
 	glVertex3f(0.5,-0.5,0.0);
 	glVertex3f(0.0,0.5,0.0);
 	glVertex3f(-0.5,-0.5,0.0);
 	glEnd();
 	glFlush();
 }
-
+*/
 //opengl 4
-void triangle2(){
+void triangle1(){
   glClear(GL_COLOR_BUFFER_BIT);//clears the screen
   
   glGenVertexArrays(1, &vaoID);//generates object name for Vertex Array Objects
@@ -168,13 +171,12 @@ void triangle2(){
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);//allocates the memory of teh vertices
 
  ShaderInfo shaders[]={//create the shader specified by my initshaders 
-  { GL_VERTEX_SHADER , "vertexshader.glsl"} ,
-  { GL_FRAGMENT_SHADER , "fragmentshader.glsl"},
+  { GL_VERTEX_SHADER , "vertexshader1.glsl"} ,
+  { GL_FRAGMENT_SHADER , "fragmentshader1.glsl"},
   { GL_NONE , NULL} 
   };
 
   initShaders(shaders);//creates shaders
-  
   
   glEnableVertexAttribArray(0);//enables the vertex attribute index 
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);//specified the start the vertice array used to the draw
@@ -183,46 +185,42 @@ void triangle2(){
   glFlush();//makes sure the prcesses finish
 }
 
-void triangle3(){
+void triangle2(){
   glClear(GL_COLOR_BUFFER_BIT);//clear screen
 
-  glGenVertexArrays(1, &voaID);//generates object name for Vertex Array Objects
-  glBindVertexArray(voaID);//bind the object to the array
+  glGenVertexArrays(1, &vaoID);//generates object name for Vertex Array Objects
+  glBindVertexArray(vaoID);//bind the object to the array
 
   glGenBuffers(1, &vboID);//generates object name for the Vertex Buffer Object
   glBindBuffer(GL_ARRAY_BUFFER, vboID);//bind the object to the array
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertexarray), vertexarray, GL_STATIC_DRAW);//allocates the memory of teh vertices
 
- ShaderInfo shaders[]={//create the shader specified by my initshaders 
-  { GL_VERTEX_SHADER , "vertexshader.glsl"} ,
-  { GL_FRAGMENT_SHADER , "fragmentshader.glsl"},
+ ShaderInfo shaders[]={//create the shader specified by my initshaders input
+  { GL_VERTEX_SHADER , "vertexshader2.glsl"} ,
+  { GL_FRAGMENT_SHADER , "fragmentshader2.glsl"},
   { GL_NONE , NULL} 
   };
 
   initShaders(shaders);//creates shaders
-
   	  	
   glEnableVertexAttribArray(0);//enables the vertex attribute index 
   glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,(void*)0);//specified the start the vertice array used to the draw
   
   glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, indices);//draws object based on indices of the polygon
-  glFlush();//makes sure the prcesses finish
+  glDisableVertexAttribArray(0);
+  glFlush();//make sure the processes finish
 }
 
 void drawscene(){
-  switch(counter%3){ //easy way to switch throw functions
+  switch(counter%2){//easy way to switch throw functions
     case 0:
       glutDisplayFunc(triangle1);
-      glutPostRedisplay();// sets flags for opengl to redraw the display
+      glutPostRedisplay();//sets flags for opengl to redraw the display
       break;
     case 1:
       glutDisplayFunc(triangle2);
       glutPostRedisplay();
       break;
-    case 2:
-    	glutDisplayFunc(triangle3);
-    	glutPostRedisplay();
-    	break;
   }
 }
 //this function create the interaction with the mouse
@@ -259,7 +257,7 @@ int main(int argc, char **argv){
   const GLubyte* version=glGetString(GL_SHADING_LANGUAGE_VERSION);
   fprintf(stderr,"Opengl glsl version %s\n", version);
 
-  version =glGetString(GL_VERSION);
+  version=glGetString(GL_VERSION);
   fprintf(stderr,"Opengl version %s\n", version);
 
   glutDisplayFunc(drawscene);//displays callback draws the shapes
